@@ -9,7 +9,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include <cstdlib>   //std::srand
+#include <random>    //std::minstd_rand
 #include <algorithm> //std::next_permutation
 #include <iostream>  //std::cout
 
@@ -42,11 +42,11 @@ bool test_random_shuffled(std::size_t const element_count, std::size_t const num
       elements[i].key=key;
    }
 
-   std::srand(0);
+   std::minstd_rand gen(0);
 
    for (std::size_t i = 0; i != num_iter; ++i)
    {
-      std::random_shuffle(elements.get(), elements.get() + element_count);
+      std::shuffle(elements.get(), elements.get() + element_count, gen);
       for(std::size_t i = 0; i < (num_keys ? num_keys : element_count); ++i){
          key_reps[i]=0;
       }
@@ -55,7 +55,7 @@ bool test_random_shuffled(std::size_t const element_count, std::size_t const num
       }
 
       boost::container::vector<order_type> tmp(elements.get(), elements.get()+element_count);
-      std::size_t const split = std::size_t(std::rand()) % element_count;
+      std::size_t const split = std::size_t(gen()) % element_count;
       std::stable_sort(tmp.data(), tmp.data()+split, order_type_less<order_type>());
       std::stable_sort(tmp.data()+split, tmp.data()+element_count, order_type_less<order_type>());
       

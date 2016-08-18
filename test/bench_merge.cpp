@@ -12,6 +12,7 @@
 #include <algorithm> //std::inplace_merge
 #include <cstdio>    //std::printf
 #include <iostream>  //std::cout
+#include <random>
 
 #include <boost/config.hpp>
 
@@ -23,6 +24,9 @@
 using boost::timer::cpu_timer;
 using boost::timer::cpu_times;
 using boost::timer::nanosecond_type;
+
+std::random_device rd;
+std::mt19937 rg(rd());
 
 //#define BOOST_MOVE_ADAPTIVE_SORT_STATS
 void print_stats(const char *str, boost::ulong_long_type element_count)
@@ -37,7 +41,6 @@ void print_stats(const char *str, boost::ulong_long_type element_count)
 template<class T, class Compare>
 std::size_t generate_elements(T elements[], std::size_t element_count, std::size_t key_reps[], std::size_t key_len, Compare comp)
 {
-   std::srand(0);
    for(std::size_t i = 0; i < (key_len ? key_len : element_count); ++i){
       key_reps[i]=0;
    }
@@ -45,9 +48,9 @@ std::size_t generate_elements(T elements[], std::size_t element_count, std::size
       std::size_t  key = key_len ? (i % key_len) : i;
       elements[i].key=key;
    }
-   std::random_shuffle(elements, elements + element_count);
-   std::random_shuffle(elements, elements + element_count);
-   std::random_shuffle(elements, elements + element_count);
+   std::shuffle(elements, elements + element_count, rg);
+   std::shuffle(elements, elements + element_count, rg);
+   std::shuffle(elements, elements + element_count, rg);
    for(std::size_t i = 0; i < element_count; ++i){
       elements[i].val = key_reps[elements[i].key]++;
    }

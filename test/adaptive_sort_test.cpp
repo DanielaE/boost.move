@@ -9,7 +9,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include <cstdlib>   //std::srand
+#include <random>    //std::default_random_engine
 #include <algorithm> //std::next_permutation
 #include <iostream>  //std::cout
 
@@ -41,11 +41,11 @@ bool test_random_shuffled(std::size_t const element_count, std::size_t const num
       elements[i].key=key;
    }
 
-   std::srand(0);
+   std::default_random_engine gen(0);
 
    for (std::size_t i = 0; i != num_iter; ++i)
    {
-      std::random_shuffle(elements.get(), elements.get() + element_count);
+      std::shuffle(elements.get(), elements.get() + element_count, gen);
       for(std::size_t i = 0; i < (num_keys ? num_keys : element_count); ++i){
          key_reps[i]=0;
       }

@@ -13,6 +13,7 @@
 #include <algorithm> //std::stable_sort, std::make|sort_heap, std::random_shuffle
 #include <cstdio>    //std::printf
 #include <iostream>  //std::cout
+#include <random>
 
 #include <boost/config.hpp>
 
@@ -24,6 +25,9 @@ using boost::timer::cpu_times;
 using boost::timer::nanosecond_type;
 
 #include "order_type.hpp"
+
+std::random_device rd;
+std::mt19937 rg(rd());
 
 //#define BOOST_MOVE_ADAPTIVE_SORT_STATS
 void print_stats(const char *str, boost::ulong_long_type element_count)
@@ -48,9 +52,9 @@ void generate_elements(T elements[], std::size_t element_count, std::size_t key_
       std::size_t  key = key_len ? (i % key_len) : i;
       elements[i].key=key;
    }
-   std::random_shuffle(elements, elements + element_count);
-   std::random_shuffle(elements, elements + element_count);
-   std::random_shuffle(elements, elements + element_count);
+   std::shuffle(elements, elements + element_count, rg);
+   std::shuffle(elements, elements + element_count, rg);
+   std::shuffle(elements, elements + element_count, rg);
    for(std::size_t i = 0; i < element_count; ++i){
       elements[i].val = key_reps[elements[i].key]++;
    }
